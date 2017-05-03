@@ -1,0 +1,16 @@
+<ion-view view-title="Contacts">
+
+  <ion-content>
+    <div ng-repeat="contact in myContacts">
+      <div class="contact">
+        <img ng-src='{{contact.photo}}' alt="" width="100px" height="100px">
+        <p>
+          <span class="name">Name :</span> {{contact.name}}
+          <br>
+          <span class="number">Phone number :</span> {{contact.number}}
+        </p>
+      </div>
+      <hr>
+    </div>
+  </ion-content>
+</ion-view>
