@@ -1,20 +1,5 @@
 angular.module('starter.controllers', ['ionic'])
 
-.directive("cross", function($compile) {
-  return {
-    terminal:true,
-    priority:1001,
-    compile: function(cross) {
-      cross.removeAttr('my-dir');
-      cross.attr('ng-click', 'fxn()');
-      var fn = $compile(cross);
-      return function(scope){
-        fn(scope);
-      };
-    }
-  };
-})
-
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 
 })
