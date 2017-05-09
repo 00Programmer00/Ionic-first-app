@@ -1,5 +1,20 @@
 angular.module('starter.controllers', ['ionic'])
 
+.directive("cross", function($compile) {
+  return {
+    terminal:true,
+    priority:1001,
+    compile: function(cross) {
+      cross.removeAttr('my-dir');
+      cross.attr('ng-click', 'fxn()');
+      var fn = $compile(cross);
+      return function(scope){
+        fn(scope);
+      };
+    }
+  };
+})
+
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 
 })
@@ -8,7 +23,7 @@ angular.module('starter.controllers', ['ionic'])
 
 })
 
-.controller('ContactsCtrl', function ($scope){
+.controller('ContactsCtrl', function ($scope, $ionicModal){
   var options = new ContactFindOptions();
   options.filter = "";
   options.multiple = true;
@@ -47,6 +62,26 @@ angular.module('starter.controllers', ['ionic'])
 
     }
   }
+
+  $ionicModal.fromTemplateUrl('templates/modal.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  $scope.createContact = function(user) {
+    var myContact = navigator.contacts.create({"displayName": user.firstName});
+    var phoneNumbers = [];
+    phoneNumbers[0] = new ContactField('mobile', user.lastName, false);
+    myContact.phoneNumbers = phoneNumbers;
+    myContact.save();
+    $scope.myContacts.push({'name': user.name, 'number': user.number, 'photo': 'img/anonim.png'});
+    alert(myContact.phoneNumbers[0].value);
+    user.name = '';
+    user.number = '';
+    $scope.modal.hide();
+  };
+
 })
 
 .controller('imgCtrl',function ($scope) {
@@ -62,10 +97,11 @@ angular.module('starter.controllers', ['ionic'])
            sourceType: navigator.camera.PictureSourceType.SAVEDPHOTOALBUM });
       };
 
+    $scope.visible = true;
+
     $scope.deletePhoto = function(){
-      var img = document.getElementById("image");
-      img.setAttribute("src", "");
-      this.remove();
+      $scope.image = '';
+      $scope.visible = true;
     };
 
     function onFail (message) {
@@ -74,11 +110,7 @@ angular.module('starter.controllers', ['ionic'])
 
     function onSuccess (imageData) {
       $scope.image = "data:image/jpeg;base64," + imageData;
-      var cross = document.createElement("div");
-      cross.className = "cross";
-      cross.setAttribute("ng-click","deletePhoto()");
-      var field = document.getElementById("imgField");
-      field.appendChild(cross);
+      $scope.visible = false;
     }
 })
 
@@ -96,6 +128,7 @@ angular.module('starter.controllers', ['ionic'])
       if (dur > 0) {
         clearInterval(timerDur);
         $scope.duration = Math.floor(dur / 60) + ":" + (dur % 60 ? dur % 60 : '00').toFixed(0);
+        alert($scope.duration);
       }
     }, 100);
 
@@ -121,7 +154,7 @@ angular.module('starter.controllers', ['ionic'])
             if (position > -1) {
               setAudioPosition((Math.floor(position / 60) + ":" + (position % 60 ? position % 60 : '00').toFixed(0)));
             } else {
-              document.getElementById('audio_position').innerHTML = "00:00";
+              setAudioPosition("00:00");
             }
           },
           function(error) {

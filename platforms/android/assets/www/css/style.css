@@ -2,6 +2,10 @@
   font-family: Pompadur;
   src: url("../fonts/10558.ttf");
 }
+
+#listOfContacts{
+  /*margin-top: 35px;*/
+}
 .contact{
 
   height: 105px;
@@ -32,6 +36,8 @@
   width: 100px;
   background-image: url("../img/gallery.png");
   background-size: cover;
+  margin-top: 35px;
+  float: right;
 }
 
 .btn_photo{
@@ -39,6 +45,9 @@
   width: 100px;
   background-image: url("../img/photo.png");
   background-size: cover;
+  margin-top: 35px;
+
+
 }
 
 .cross{
